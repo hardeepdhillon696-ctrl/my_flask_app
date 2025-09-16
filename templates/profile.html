@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+    }
+    .profile-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #6c63ff;
+    }
+    .btn-gradient {
+      background: linear-gradient(90deg, #6c63ff, #48c6ef);
+      border: none;
+      color: white;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+    .btn-gradient:hover { opacity: 0.9; }
+    h2, h3 { color: #333; }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: none;
+      font-size: 16px;
+      color: #333;
+    }
+    textarea:focus {
+      border-color: #6c63ff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+    }
+    /* Flash Toast Messages */
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .toast-msg {
+      background: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      animation: fadein 0.5s, fadeout 0.5s 3s;
+    }
+    .toast-msg.error { background: #f44336; }
+    .toast-msg.warning { background: #ff9800; }
+    .close-btn { margin-left: 12px; cursor: pointer; font-weight: bold; }
+    @keyframes fadein { from {opacity:0;transform:translateX(100%);} to {opacity:1;transform:translateX(0);} }
+    @keyframes fadeout { from {opacity:1;transform:translateX(0);} to {opacity:0;transform:translateX(100%);} }
+
+    /* Upload card style */
+    .upload-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .upload-card video {
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div id="toast-container">
+        {% for category, message in messages %}
+          <div class="toast-msg {{ category }}">
+            {{ message }}
+            <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="profile-card">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">← Back</a>
+
+    <!-- Profile Header -->
+    <div class="d-flex align-items-center mb-4">
+      <img src="{{ url_for('static', filename='avatars/' ~ user.avatar) }}" alt="Avatar" class="avatar me-3">
+      <div>
+        <h2>{{ user.username }}</h2>
+        <p class="text-muted">{{ user.email }}</p>
+      </div>
+    </div>
+
+    <!-- Avatar Update -->
+    <form method="POST" enctype="multipart/form-data" class="mb-4">
+      <input type="file" name="avatar" class="form-control mb-2">
+      <button type="submit" class="btn-gradient">Change Avatar</button>
+    </form>
+
+    <!-- Bio Update -->
+    <h3>About Me</h3>
+    <form method="POST" action="{{ url_for('profile', username=user.username) }}">
+      <label for="bio">About Me</label>
+      <textarea name="bio" id="bio" rows="3" required>{{ user.bio }}</textarea>
+      <button type="submit" class="btn-gradient">Save Bio</button>
+    </form>                                                                                                                               
+
+    <!-- Username Update -->
+    <h3>Change Username</h3>
+    <form method="POST" action="{{ url_for('change_username') }}">
+      <input type="text" name="new_username" class="form-control mb-2" placeholder="New Username" required>
+      <button type="submit" class="btn-gradient">Update Username</button>
+    </form>
+
+    <!-- Password Update -->
+    <h3>Change Password</h3>
+    <form method="POST" action="{{ url_for('change_password') }}">
+      <input type="password" name="current_password" class="form-control mb-2" placeholder="Current Password" required>
+      <input type="password" name="new_password" class="form-control mb-2" placeholder="New Password" required>
+      <button type="submit" class="btn-gradient">Update Password</button>
+    </form>
+
+    <!-- User Uploads Section -->
+     <!-- Latest Uploads Section -->
+<section id="uploads" class="container my-5 text-center">
+  <h3 class="text-warning mb-4">
+    <i class="bi bi-folder-fill"></i> Latest Uploads
+  </h3>
+
+  <div class="row justify-content-center">
+    {% for upload in uploads %}
+    <div class="col-md-4 mb-4">
+      <div class="card bg-dark text-white shadow-lg border-0">
+        
+        <!-- Thumbnail (small preview only, no autoplay here) -->
+        {% if upload.filetype == 'image' %}
+        <img src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}" 
+             class="card-img-top rounded" alt="Uploaded Image">
+        {% else %}
+        <video class="card-img-top rounded" muted preload="metadata">
+          <source src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}">
+        </video>
+        {% endif %}
+
+        <div class="card-body">
+          <!-- <h6 class="card-title">{{ upload.filename }}</h6> -->
+
+          <!-- Stats (Likes + Views) -->
+          <div class="d-flex justify-content-between small text-muted mb-2">
+            <span><i class="bi bi-eye"></i> {{ upload.views or 0 }}</span>
+            <span><i class="bi bi-heart"></i> {{ upload.likes or 0 }}</span>
+          </div>
+
+          <!-- View Button (opens modal) -->
+          <a href="#" class="btn btn-success btn-sm w-100"
+             data-bs-toggle="modal" data-bs-target="#videoModal{{ upload.id }}">
+            VIEW
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for this upload -->
+    <div class="modal fade" id="videoModal{{ upload.id }}" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ upload.filename }}</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            {% if upload.filetype == 'image' %}
+              <img src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}" 
+                   class="img-fluid rounded">
+            {% else %}
+              <video id="video{{ upload.id }}" class="w-100 rounded" controls>
+                <source src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}">
+              </video>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Bootstrap JS (needed for modal to work) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <h3 class="mt-5">{{ user.username }}'s Uploads</h3>
+    {% if uploads %}
+      {% for upload in uploads %}
+        <div class="upload-card">
+          <video src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}" class="w-100" controls></video>
+          <p><strong>{{ upload.filename }}</strong></p>
+          <p>📅 Uploaded: {{ upload.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+          <p>👁️ Views: {{ upload.views }} | ❤️ Likes: {{ upload.likes }}</p>
+          <form method="POST" action="{{ url_for('like_video', video_id=upload.id) }}">
+            <button type="submit" class="btn btn-danger btn-sm">❤️ Like</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">No uploads yet. Start sharing your gaming moments!</p>
+    {% endif %}
+  </div>
+
+  <script>
+    // Auto-remove toasts after 4s
+    setTimeout(() => {
+      document.querySelectorAll(".toast-msg").forEach(toast => toast.remove());
+    }, 4000);
+  </script>
+
+</body>
+</html>

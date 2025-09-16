@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <span class="navbar-brand">My App</span>
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Logout</a>
+  </div>
+</nav>
+
+<div class="container text-center mt-5">
+  <h2>Welcome, <span class="text-primary">{{ user }}</span> 🎉</h2>
+  <p class="lead">You are logged in successfully.</p>
+</div>
+{% endblock %}

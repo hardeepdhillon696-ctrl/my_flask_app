@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pool.css') }}">
+
+<div class="card shadow-lg mt-4">
+  <div class="card-header bg-danger text-light">
+    🎱 Pool Game
+  </div>
+  <div class="card-body bg-secondary">
+
+    <div class="pool-wrap">
+      <!-- ==== Pool Table ==== -->
+      <div class="table-area">
+        <canvas id="tableCanvas" width="960" height="540"></canvas>
+
+        <div class="pool-controls-bar">
+          <div class="controls">
+            <button id="btnReset">Reset Table</button>
+            <button id="btnShuffle">Rack Balls</button>
+            <button id="btnToggleAim">Toggle Aim</button>
+          </div>
+
+          <div class="instructions">
+            Drag on cue ball to aim/adjust. Scroll or drag farther for power.  
+            Press <kbd>Space</kbd> for quick shot.
+          </div>
+        </div>
+      </div>
+
+      <!-- ==== HUD Side Panel ==== -->
+      <aside class="pool-side">
+        <div class="hud">
+          <h1>Polished Pool</h1>
+          <div class="row"><div class="small">Turn</div><div id="turnLabel" class="small">Player 1</div></div>
+          <div class="row"><div class="small">Score</div><div id="scoreLabel" class="small">0</div></div>
+
+          <div class="meter-box">
+            <div class="small">Shot Power</div>
+            <div class="meter" title="Power meter"><i id="powerFill"></i></div>
+          </div>
+
+          <div class="small">Shot Controls</div>
+          <div class="shot-buttons">
+            <button id="undoBtn">Undo</button>
+            <button id="toggleSpin">Spin Off</button>
+          </div>
+        </div>
+
+        <div class="hud">
+          <div class="row"><div><strong>Game Info</strong></div><div class="small">Simple 8-ball style</div></div>
+          <div class="tips">
+            <ul>
+              <li>Aim: Click & drag from cue ball</li>
+              <li>Power: Drag farther (or scroll) then release</li>
+              <li>Quick shot: Press Spacebar</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- JS game logic -->
+<script src="{{ url_for('static', filename='js/pool.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pool.css') }}">
+
+

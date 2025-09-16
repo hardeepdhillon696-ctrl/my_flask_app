@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<!-- Flash Alerts -->
+<!-- {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="alert-container">
+      {% for category, message in messages %}                                                               
+        <div class="custom-alert custom-alert-{{ category }}">
+          {{ message }}
+          llll
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %} -->
+
+<!-- Attractive Transparent Home Button -->
+<a href="{{ url_for('index') }}" class="btn btn-home">🏠 Home</a>
+
+<div class="container" style="margin-top: 100px;">
+  <!-- <h2>Welcome Back!</h2> -->
+  <form method="POST" action="/login" style="margin-bottom: 20px;">
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" name="email" id="emailInput" required>
+      <label for="emailInput">Email</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control" name="password" id="passwordInput" required>
+      <label for="passwordInput">Password</label>
+    </div>
+    <button class="btn btn-gradient w-100">🔑 Login</button>
+  </form>
+
+  <div class="d-flex justify-content-between mt-3">
+    <!-- <a href="{{ url_for('register') }}">Register</a> -->
+    <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+  </div>
+</div>
+
+<!-- Custom Alert Styles -->
+<style>
+  .custom-alert {
+    padding: 12px 18px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  /* Success Alert (Green Neon) */
+  .custom-alert-success {
+    color: #00ffcc;
+    background: rgba(0, 255, 200, 0.1);
+    border: 1px solid #00ffcc;
+    text-shadow: 0 0 6px #00ffcc;
+    box-shadow: 0 0 12px #00ffcc;
+  }
+
+  /* Danger Alert (Red Neon) */
+  .custom-alert-danger {
+    color: #ff0055;
+    background: rgba(255, 0, 85, 0.1);
+    border: 1px solid #ff0055;
+    text-shadow: 0 0 6px #ff0055;
+    box-shadow: 0 0 12px #ff0055;
+  }
+
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Transparent Home Button Styles */
+  .btn-home {
+    position: absolute;
+    top: 2px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #42eefa; /* Text color */
+    background-color: transparent; /* Transparent background */
+    border: 2px solid #54eff5; /* Border color */
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .btn-home:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
+    color: #0056b3; /* Darker text color on hover */
+  }
+</style>
+
+<!-- Auto dismiss after 4 sec -->
+<script>
+  setTimeout(() => {
+    const alerts = document.querySelectorAll('.custom-alert');
+    alerts.forEach(alert => alert.style.display = 'none');
+  }, 4000);
+</script>
+
+{% endblock %}
