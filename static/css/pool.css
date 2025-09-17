@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ===== Pool Game Layout ===== */
 .pool-wrap {
   display: flex;
@@ -374,4 +375,382 @@ button:hover {
     padding: 10px;
     overflow-y: auto;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+=======
+/* ===== Pool Game Layout ===== */
+.pool-wrap {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* ===== Game Table ===== */
+.table-area {
+  background: #145214;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.table-area canvas {
+  display: block;
+  border-radius: 8px;
+}
+
+/* ===== Controls Bar ===== */
+.pool-controls-bar {
+  width: 960px;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 6px 10px;
+  background: #0e2a0e;
+  border-radius: 8px;
+}
+
+.pool-controls-bar .controls button {
+  margin-right: 8px;
+}
+
+.pool-controls-bar .instructions {
+  color: #d7f9de;
+  font-size: 13px;
+}
+
+/* ===== Side HUD ===== */
+.pool-side {
+  width: 260px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hud {
+  background: #0b1a1e;
+  border-radius: 10px;
+  padding: 14px;
+  color: #e6f2f7;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.hud h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #66ffcc;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.small {
+  font-size: 13px;
+}
+
+/* ===== Power Meter ===== */
+.meter-box {
+  margin: 12px 0;
+}
+
+.meter {
+  background: #222;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.meter i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #44ff44, #ff4444);
+  transition: width 0.2s;
+}
+
+/* ===== Buttons ===== */
+button {
+  background: #1d3f3a;
+  color: #e6f2f7;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #2a5f56;
+}
+
+/* Shot buttons */
+.shot-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* ===== Tips ===== */
+.tips {
+  margin-top: 8px;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #b7e3ef;
+  list-style: disc;
+}
+  body {
+    background: #121212;
+    color: #eee;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  #gameWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  #poolCanvas {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  }
+
+  .player-panel {
+    display: flex;
+    align-items: center;
+    background: #1e1e1e;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    gap: 10px;
+    margin: 5px;
+  }
+
+  .player-panel input {
+    background: #2c2c2c;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .ball-count {
+    background: #333;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #ffca3a;
+  }
+
+  #uiPanel {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 10px;
+  }
+
+  #turnIndicator {
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #00e676;
+  }
+  #scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e1e1e;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+  width: 800px;
+  margin: 0 auto 15px auto;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+.player-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #2a2a2a;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+.player-card input {
+  background: #333;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  width: 110px;
+}
+
+.player-card input:focus {
+  outline: 2px solid #00e676;
+}
+
+.ball-badge {
+  display: flex;
+  gap: 3px;
+  margin-top: 5px;
+}
+
+.ball-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+.ball-dot.red { background-color: red; }
+.ball-dot.yellow { background-color: yellow; }
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff5722, #ff9800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+}
+#turnIndicator {
+  font-weight: 600;
+  font-size: 16px;
+  text-shadow: 0 0 8px rgba(0,0,0,0.6);
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+/* 🎱 Turn colors */
+.turn-red {
+  color: #ff5252;
+  background: rgba(255, 82, 82, 0.15);
+  box-shadow: 0 0 10px rgba(255, 82, 82, 0.5);
+}
+
+.turn-yellow {
+  color: #fbc02d;
+  background: rgba(251, 192, 45, 0.15);
+  box-shadow: 0 0 10px rgba(251, 192, 45, 0.5);
+}
+#gameMessage {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #ff5252, #ff1744);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease, top 0.5s ease;
+    }
+    #gameMessage.show {
+      opacity: 1;
+      top: 40px;
+    }
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;   /* match canvas */
+  height: 400px;  /* match canvas */
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 20;
+  border-radius: 15px;
+  animation: flash 1s infinite alternate;
+}
+
+.overlay.hidden { display: none; }
+
+.overlay-content { text-align: center; color: #fff; font-family: "Segoe UI", Arial, sans-serif; }
+
+.overlay-content h1 {
+  font-size: 52px;
+  margin-bottom: 15px;
+  color: #ff4444;
+  text-shadow: 0 0 10px #000;
+}
+
+.overlay-content p {
+  font-size: 22px;
+  margin-bottom: 25px;
+  color: #f8f9fa;
+}
+
+.overlay-buttons button {
+  margin: 8px;
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.overlay-buttons button:first-child {
+  background: #28a745;
+  color: #fff;
+}
+
+.overlay-buttons button:first-child:hover { background: #218838; }
+
+.overlay-buttons button:last-child {
+  background: #dc3545;
+  color: #fff;
+}
+
+.overlay-buttons button:last-child:hover { background: #b52a3a; }
+
+@keyframes flash {
+  0%   { background: rgba(0,0,0,0.85); }
+  100% { background: rgba(255,0,0,0.4); }
+}
+
+
+/* 
+  #messageLog {
+    margin-top: 12px;
+    width: 600px;
+    height: 160px;
+    background: #1b1b1b;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+>>>>>>> 1c86a86 (Initial commit)
   } */

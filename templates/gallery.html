@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -177,3 +178,184 @@
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌍 GamerHub Public Gallery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #ffcc00;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .card {
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img,
+    .card video {
+      width: 100%;
+      height: auto;
+      border-bottom: 2px solid #333;
+      cursor: pointer;
+    }
+
+    .card-body {
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .like-btn {
+      background: #e50914;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .like-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Popup Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .lightbox video {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🌍 GamerHub Public Gallery</h2>
+
+    <div class="gallery">
+      {% if uploads %}
+        {% for upload in uploads %}
+        <div class="card">
+          {% if upload.filetype == 'video' %}
+            <video muted
+                   data-src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}"
+                   data-id="{{ upload.id }}"
+                   onclick="openLightbox(this.dataset.src, this.dataset.id)">
+              <source src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}" type="video/mp4">
+              Your browser does not support video.
+            </video>
+          {% else %}
+            <img src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}" 
+                 onclick="window.open(this.src, '_blank')">
+          {% endif %}
+
+          <div class="card-body">
+            <p>
+              👁 <span id="views-{{ upload.id }}">{{ upload.views }}</span> |
+              ❤️ <span id="likes-{{ upload.id }}">{{ upload.likes }}</span>
+            </p>
+            <button class="like-btn"
+                    data-videoid="{{ upload.id }}"
+                    {% if upload.id in session.get('liked_videos', []) %} disabled {% endif %}
+                    onclick="likeVideo(this.dataset.videoid, this)">
+              ❤️ Like
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-muted">No uploads yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Popup Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <video id="popupVideo" controls autoplay></video>
+  </div>
+
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const popupVideo = document.getElementById('popupVideo');
+
+    function openLightbox(src, videoId) {
+      lightbox.style.display = 'flex';
+      popupVideo.src = src;
+      popupVideo.play();
+
+      // Count view
+      fetch(`/view/${videoId}`, { method: "POST" })
+        .then(r => r.json())
+        .then(data => {
+          document.querySelector(`#views-${videoId}`).textContent = data.views;
+        })
+        .catch(err => console.error("View update failed", err));
+    }
+
+    function closeLightbox() {
+      popupVideo.pause();
+      popupVideo.currentTime = 0;
+      popupVideo.src = "";
+      lightbox.style.display = 'none';
+    }
+
+    popupVideo.addEventListener("ended", closeLightbox);
+
+    async function likeVideo(videoId, btn) {
+      btn.disabled = true;
+      try {
+        const resp = await fetch(`/like/${videoId}`, { method: "POST" });
+        const data = await resp.json();
+        if (data.error) {
+          alert(data.error);
+        } else {
+          document.getElementById(`likes-${videoId}`).textContent = data.likes;
+        }
+      } catch (err) {
+        alert("Error liking video.");
+      }
+    }
+  </script>
+
+</body>
+</html>
+>>>>>>> 1c86a86 (Initial commit)

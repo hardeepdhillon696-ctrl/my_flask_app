@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -171,3 +172,178 @@ form.addEventListener('submit', async (e) => {
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - GamerHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+    }
+    .form-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .password-warning {
+      color: #ff4d4f;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    .strength-bar {
+      height: 6px;
+      border-radius: 3px;
+      background-color: #555;
+      margin-top: 5px;
+      width: 100%;
+    }
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+    .strength-weak { background-color: #ff4d4f; }
+    .strength-medium { background-color: #ffa500; }
+    .strength-strong { background-color: #4caf50; }
+    .server-message {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="form-container">
+  <h3 class="text-center mb-4">Create Account</h3>
+
+  <!-- 🔹 Server message placeholder -->
+  <div id="serverMessage" class="server-message"></div>
+
+  <form id="registerForm">
+    <div class="mb-3 form-floating">
+      <input type="text" class="form-control" id="username" name="username" required placeholder="Username">
+      <label for="username">Username</label>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input type="email" class="form-control" id="email" name="email" required placeholder="Email">
+      <label for="email">Email</label>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input type="password" class="form-control" id="password" name="password" required placeholder="Password">
+      <label for="password">Password</label>
+      <div id="passwordWarning" class="password-warning"></div>
+      <div class="strength-bar">
+        <div id="strengthFill" class="strength-fill"></div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Register</button>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById('registerForm');
+const passwordInput = document.getElementById('password');
+const warningDiv = document.getElementById('passwordWarning');
+const strengthFill = document.getElementById('strengthFill');
+const serverMessage = document.getElementById('serverMessage');
+
+function validatePassword(password) {
+  const minLength = 8;
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+  if(password.length < minLength) return "Password must be at least 8 characters.";
+  if(!hasUpper) return "Include at least 1 uppercase letter.";
+  if(!hasLower) return "Include at least 1 lowercase letter.";
+  if(!hasNumber) return "Include at least 1 number.";
+  if(!hasSpecial) return "Include at least 1 special character.";
+  return "";
+}
+
+function getStrength(password) {
+  let score = 0;
+  if(password.length >= 8) score++;
+  if(/[A-Z]/.test(password)) score++;
+  if(/[a-z]/.test(password)) score++;
+  if(/\d/.test(password)) score++;
+  if(/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+
+  if(score <= 2) return "weak";
+  if(score <= 4) return "medium";
+  return "strong";
+}
+
+// Live validation & strength meter
+passwordInput.addEventListener('input', () => {
+  const pwd = passwordInput.value;
+  const message = validatePassword(pwd);
+  warningDiv.textContent = message;
+
+  const strength = getStrength(pwd);
+  strengthFill.className = "strength-fill";
+  if(strength === "weak") {
+    strengthFill.classList.add("strength-weak");
+    strengthFill.style.width = "33%";
+  } else if(strength === "medium") {
+    strengthFill.classList.add("strength-medium");
+    strengthFill.style.width = "66%";
+  } else if (pwd.length > 0) {
+    strengthFill.classList.add("strength-strong");
+    strengthFill.style.width = "100%";
+  } else {
+    strengthFill.style.width = "0%";
+  }
+});
+
+// AJAX form submission
+form.addEventListener('submit', async (e) => {
+  e.preventDefault(); // Prevent full page reload
+  serverMessage.innerHTML = "";
+
+  const pwdMessage = validatePassword(passwordInput.value);
+  if(pwdMessage) {
+    warningDiv.textContent = pwdMessage;
+    passwordInput.focus();
+    return;
+  }
+
+  const formData = new FormData(form);
+
+  try {
+    // ✅ endpoint is "/register" (matches your app.py route)
+    const response = await fetch('/register', {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if(result.success) {
+      serverMessage.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+      form.reset();
+      strengthFill.style.width = "0%";
+    } else {
+      serverMessage.innerHTML = `<div class="alert alert-danger">${result.error || "Registration failed."}</div>`;
+    }
+
+  } catch(err) {
+    serverMessage.innerHTML = `<div class="alert alert-danger">Server error. Try again later.</div>`;
+  }
+});
+</script>
+
+</body>
+</html>
+>>>>>>> 1c86a86 (Initial commit)
