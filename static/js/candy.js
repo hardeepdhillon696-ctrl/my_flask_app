@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 (function(){
   // config
   const COLS = 8, ROWS = 8;

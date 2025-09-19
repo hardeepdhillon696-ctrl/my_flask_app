@@ -1,159 +1,54 @@
-<<<<<<< HEAD
-document.addEventListener("DOMContentLoaded", function () {
-  const cells = document.querySelectorAll("#tic-tac-toe-board td");
-  const status = document.getElementById("tic-tac-toe-status");
-  const resetBtn = document.getElementById("tic-tac-toe-reset");
+(function () {
+  const canvas = document.getElementById("poolCanvas");
+  const ctx = canvas.getContext("2d");
 
-  const playerXInput = document.getElementById("playerXName");
-  const playerOInput = document.getElementById("playerOName");
+  const TABLE = { width: canvas.width, height: canvas.height, rail: 28, pocketRadius: 24 };
+  const BALL = { r: 10, m: 1, friction: 0.992, minSpeed: 0.05 };
 
-  let board = Array(12).fill("");
-  let currentPlayer = "X";
-  let gameActive = true;
+  let balls = [], cueBall = null, currentPlayer = 1, ownership = {1:null,2:null};
+  let ballsMoving = false, pottedThisShot = [], scratchThisShot = false;
+  let blackPottedThisShot = false, gameOver = false, firstContact = null;
 
-const winningCombos = [
-  [0, 1, 2, 3],    // horizontal rows
-  [4, 5, 6, 7],
-  [8, 9, 10, 11]
-  // no vertical or diagonal 4-cell wins on 3-row board
-];
+  const pockets = [
+    {x:TABLE.rail, y:TABLE.rail}, {x:TABLE.width/2, y:TABLE.rail}, {x:TABLE.width-TABLE.rail, y:TABLE.rail},
+    {x:TABLE.rail, y:TABLE.height-TABLE.rail}, {x:TABLE.width/2, y:TABLE.height-TABLE.rail}, {x:TABLE.width-TABLE.rail, y:TABLE.height-TABLE.rail}
+  ].map(p=>({...p,r:TABLE.pocketRadius}));
 
-function getPlayerName(player) {
-    if (player === "X") {
-      return playerXInput.value.trim() || "Player X";
-    } else {
-      return playerOInput.value.trim() || "Player O";
-    }
-  }
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const dist=(ax,ay,bx,by)=>Math.hypot(ax-bx,ay-by);
 
-cells.forEach((cell, idx) => {
-  cell.addEventListener("click", () => {
-    console.log(`Clicked cell ${idx}, current board:`, board);
-    if (!gameActive || board[idx] !== "") return;
-    board[idx] = currentPlayer;
-    cell.textContent = currentPlayer;
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    updateStatus();
-  });
-});
+  // --- Ball class & functions ---
+  class Ball { /* your Ball class code here */ }
+  Ball._id=0;
 
-function checkWinner() {
-  for (const combo of winningCombos) {
-    const marks = combo.map(idx => board[idx]);
-    if (
-      marks.length === 4 && // ensure combo is 4 cells long
-      marks[0] !== "" &&
-      marks.every(val => val === marks[0])
-    ) {
-      return marks[0];
-    }
-  }
-  return board.includes("") ? null : "draw";
-}
+  function rackBalls(){ /* your rackBalls code */ }
+  function showMessage(text,color="linear-gradient(135deg,#ff5252,#ff1744)"){ /* code */ }
+  function resolveCollision(A,B){ /* code */ }
+  function onPotted(ball){ /* code */ }
+  function playerClearedAll(playerColor){ /* code */ }
+  function endOfShot(){ /* code */ }
+  function otherPlayer(){ return currentPlayer===1?2:1; }
+  function switchTurn(){ /* code */ }
+  function getPlayerName(n){ return document.getElementById(n===1?"p1Name":"p2Name").value; }
+  function resetCueToKitchen(){ /* code */ }
+  function drawTable(){ /* code */ }
+  function drawAim(){ /* code */ }
+  function drawCue(){ /* code */ }
+  function updateAvatar(player){ /* code */ }
+  function endGame(winner, loser, foul = false){ /* code */ }
+  function restartGame(){ /* code */ }
+  function setupBalls(){ /* code */ }
+  function exitGame(){ window.location.href = "/dashboard"; }
+  function updateBallCount(){ /* code */ }
+  function update(){ /* code */ }
+  function render(){ /* code */ }
+  function loop(){ update(); render(); updateBallCount(); requestAnimationFrame(loop); }
+  function announce(msg){ console.log(msg); showMessage(msg); }
 
-function updateStatus() {
-    const winner = checkWinner();
-    if (winner === "draw") {
-      status.textContent = "It's a draw!";
-      gameActive = false;
-    } else if (winner) {
-      status.textContent = `${getPlayerName(winner)} wins! 🎉`;
-      gameActive = false;
-    } else {
-      status.textContent = `${getPlayerName(currentPlayer)}'s turn`;
-    }
-  }
+  rackBalls(); 
+  loop();
 
-  resetBtn.addEventListener("click", () => {
-    board.fill("");
-    cells.forEach(cell => cell.textContent = "");
-    currentPlayer = "X";
-    gameActive = true;
-    updateStatus();
-  });
-
-  playerXInput.addEventListener("input", updateStatus);
-  playerOInput.addEventListener("input", updateStatus);
-
-  updateStatus();
-});
-=======
-document.addEventListener("DOMContentLoaded", function () {
-  const cells = document.querySelectorAll("#tic-tac-toe-board td");
-  const status = document.getElementById("tic-tac-toe-status");
-  const resetBtn = document.getElementById("tic-tac-toe-reset");
-
-  const playerXInput = document.getElementById("playerXName");
-  const playerOInput = document.getElementById("playerOName");
-
-  let board = Array(12).fill("");
-  let currentPlayer = "X";
-  let gameActive = true;
-
-const winningCombos = [
-  [0, 1, 2, 3],    // horizontal rows
-  [4, 5, 6, 7],
-  [8, 9, 10, 11]
-  // no vertical or diagonal 4-cell wins on 3-row board
-];
-
-function getPlayerName(player) {
-    if (player === "X") {
-      return playerXInput.value.trim() || "Player X";
-    } else {
-      return playerOInput.value.trim() || "Player O";
-    }
-  }
-
-cells.forEach((cell, idx) => {
-  cell.addEventListener("click", () => {
-    console.log(`Clicked cell ${idx}, current board:`, board);
-    if (!gameActive || board[idx] !== "") return;
-    board[idx] = currentPlayer;
-    cell.textContent = currentPlayer;
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    updateStatus();
-  });
-});
-
-function checkWinner() {
-  for (const combo of winningCombos) {
-    const marks = combo.map(idx => board[idx]);
-    if (
-      marks.length === 4 && // ensure combo is 4 cells long
-      marks[0] !== "" &&
-      marks.every(val => val === marks[0])
-    ) {
-      return marks[0];
-    }
-  }
-  return board.includes("") ? null : "draw";
-}
-
-function updateStatus() {
-    const winner = checkWinner();
-    if (winner === "draw") {
-      status.textContent = "It's a draw!";
-      gameActive = false;
-    } else if (winner) {
-      status.textContent = `${getPlayerName(winner)} wins! 🎉`;
-      gameActive = false;
-    } else {
-      status.textContent = `${getPlayerName(currentPlayer)}'s turn`;
-    }
-  }
-
-  resetBtn.addEventListener("click", () => {
-    board.fill("");
-    cells.forEach(cell => cell.textContent = "");
-    currentPlayer = "X";
-    gameActive = true;
-    updateStatus();
-  });
-
-  playerXInput.addEventListener("input", updateStatus);
-  playerOInput.addEventListener("input", updateStatus);
-
-  updateStatus();
-});
->>>>>>> 1c86a86 (Initial commit)
+  // expose some functions globally
+  window.restartGame = restartGame;
+  window.exitGame = exitGame;
+})();
