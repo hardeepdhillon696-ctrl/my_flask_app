@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,82 +75,5 @@
 </script>                               
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ upload.filename }}</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .media-container {
-      max-width: 800px;
-      margin: auto;
-    }
-  </style>
-</head>
-<body>
 
-<div class="container mt-5">
-  <div class="media-container card shadow-lg">
-    <div class="card-body">
-      <h3 class="card-title">{{ upload.filename }}</h3>
-      <p class="text-muted">Uploaded by: {{ upload.user.username }}</p>
-
-      {% if upload.filetype == "video" %}
-        <video class="w-100 mb-3" controls autoplay>
-          <source src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      {% else %}
-        <img src="{{ url_for('static', filename='uploads/' ~ upload.filename) }}" class="img-fluid mb-3 rounded" alt="upload">
-      {% endif %}
-
-      <!-- Views -->
-      <p><strong>Views:</strong> <span id="viewCount">{{ upload.views }}</span></p>
-
-      <!-- Likes -->
-      <button id="likeBtn" class="btn btn-outline-danger">
-        ❤️ Like (<span id="likeCount">{{ upload.likes }}</span>)
-      </button>
-    </div>
-  </div>
-</div>
-
-<span id="uploadId" data-upload-id="{{ upload.id }}"></span>
-
-<script>
-  const uploadId = document.getElementById('uploadId').dataset.uploadId;
-  // Increment views
-  fetch(`/view/${uploadId}`, { method: "POST" })
-  .then(res => {
-    console.log("Response status:", res.status);
-    return res.json();
-  })
-  .then(data => {
-    console.log("View data:", data);
-    document.getElementById("viewCount").innerText = data.views;
-  })
-  .catch(err => console.error("View update failed:", err));
-     
-
-  // Handle likes
-  document.getElementById("likeBtn").addEventListener("click", () => {
-    fetch(`/like/${uploadId}`, { method: "POST" })
-      .then(res => res.json())
-      .then(data => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          document.getElementById("likeCount").innerText = data.likes;
-        }
-      });
-  });
-</script>                               
-</body>
-</html>
->>>>>>> 1c86a86 (Initial commit)
   
