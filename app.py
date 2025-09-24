@@ -54,7 +54,7 @@ app.secret_key = app.config['SECRET_KEY']
 # Get database URL from Render or fallback to local SQLite
 db_url = os.environ.get("DATABASE_URL", "sqlite:///users.db")
 
-# Normalize URLs for SQLAlchemy + psycopg3
+# Normalize Postgres URLs
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
 elif db_url.startswith("postgresql+psycopg2://"):
@@ -62,14 +62,16 @@ elif db_url.startswith("postgresql+psycopg2://"):
 elif db_url.startswith("postgresql://") and "+psycopg" not in db_url:
     db_url = db_url.replace("postgresql://", "postgresql+psycopg://", 1)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-# Add SSL mode if missing
+# **Ensure SSL**
 if "sslmode" not in db_url:
     if "?" in db_url:
         db_url += "&sslmode=require"
     else:
         db_url += "?sslmode=require"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 # ------------------------ EXTENSIONS ------------------------
 db = SQLAlchemy(app)           # Now safe, uses psycopg3 if URL is Postgres
 bcrypt = Bcrypt(app)
