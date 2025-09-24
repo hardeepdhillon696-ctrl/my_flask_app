@@ -47,31 +47,20 @@ def login_required(f):
 
 # ------------------------ APP SETUP ------------------------
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(32))
-app.secret_key = app.config['SECRET_KEY']
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'replace_with_a_random_secret_key')
 
 # ------------------------ DATABASE SETUP ------------------------
-# Get database URL from Render or fallback to local SQLite
-db_url = os.environ.get("DATABASE_URL", "sqlite:///users.db")
+# Use your Render database URL
+db_url = os.environ.get("DATABASE_URL")
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-# Normalize Postgres URLs
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
-elif db_url.startswith("postgresql+psycopg2://"):
-    db_url = db_url.replace("postgresql+psycopg2://", "postgresql+psycopg://", 1)
-elif db_url.startswith("postgresql://") and "+psycopg" not in db_url:
-    db_url = db_url.replace("postgresql://", "postgresql+psycopg://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# **Ensure SSL**
-if "sslmode" not in db_url:
-    if "?" in db_url:
-        db_url += "&sslmode=require"
-    else:
-        db_url += "?sslmode=require"
-
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 # ------------------------ EXTENSIONS ------------------------
 db = SQLAlchemy(app)           # Now safe, uses psycopg3 if URL is Postgres
 bcrypt = Bcrypt(app)
@@ -1029,6 +1018,6 @@ def reset_password(token):
 # ------------------------ RUN APP ------------------------
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()
-    app.run(host="0.0.0.0", port=5000)
+        db.create_all()  # Creates tables in your online DB
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
