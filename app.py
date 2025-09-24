@@ -106,6 +106,13 @@ class UploadView(db.Model):
 with app.app_context():
     db.create_all()
 
+@app.route("/db_test")
+def db_test():
+    try:
+        result = db.session.execute("SELECT NOW();")
+        return f"Database connected! Time: {list(result)[0][0]}"
+    except Exception as e:
+        return f"DB error: {e}"
 
 # ------------------------ FILE UPLOAD CONFIG ------------------------
 UPLOAD_FOLDER = "static/uploads"
