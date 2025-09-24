@@ -64,7 +64,12 @@ elif db_url.startswith("postgresql://") and "+psycopg" not in db_url:
 
 app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
+# Add SSL mode if missing
+if "sslmode" not in db_url:
+    if "?" in db_url:
+        db_url += "&sslmode=require"
+    else:
+        db_url += "?sslmode=require"
 # ------------------------ EXTENSIONS ------------------------
 db = SQLAlchemy(app)           # Now safe, uses psycopg3 if URL is Postgres
 bcrypt = Bcrypt(app)
