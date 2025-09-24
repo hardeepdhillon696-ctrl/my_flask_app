@@ -47,10 +47,9 @@ def login_required(f):
 
 # ------------------------ APP SETUP ------------------------
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'replace_with_a_random_secret_key')
+app.config['SECRET_KEY'] = 'replace_with_a_random_secret_key'
 
-# ------------------------ DATABASE SETUP ------------------------
-# Use your Render database URL
+# PostgreSQL connection (Render provides DATABASE_URL)
 db_url = os.environ.get("DATABASE_URL")
 if db_url and db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
@@ -59,12 +58,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-# ------------------------ EXTENSIONS ------------------------
-db = SQLAlchemy(app)           # Now safe, uses psycopg3 if URL is Postgres
-bcrypt = Bcrypt(app)
-serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 
