@@ -51,15 +51,26 @@ app.config['SECRET_KEY'] = 'replace_with_a_random_secret_key'
 
 # PostgreSQL connection (Render provides DATABASE_URL)
 db_url = os.environ.get("DATABASE_URL")
+
+# Render sometimes gives `postgres://`, psycopg2 needs `postgresql://`
 if db_url and db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-# Force SSL (Render requires this)
-if db_url:
-    db_url = db_url + "?sslmode=require"
+# Add sslmode=require only if it's missing
+if db_url and "sslmode" not in db_url:
+    if "?" in db_url:
+        db_url += "&sslmode=require"
+    else:
+        db_url += "?sslmode=require"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = db_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Pool options to prevent dropped connections
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+}
 
 db = SQLAlchemy(app)
 
