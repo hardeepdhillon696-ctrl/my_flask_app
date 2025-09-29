@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: my-flask-app
+    env: python
+    region: oregon         # Change if your Render region is different
+    plan: free             # Or hobby / starter depending on your account
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    pythonVersion: 3.11.9
+    autoDeploy: true       # Automatically deploy on git push
