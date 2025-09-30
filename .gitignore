@@ -1,0 +1,50 @@
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask instance folder
+instance/
+*.db
+*.sqlite3
+
+# Environment variables file
+.env
+
+# IDE/editor files
+.vscode/
+*.code-workspace
+*.suo
+*.user
+*.userosscache
+*.sln
+*.sw?
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
