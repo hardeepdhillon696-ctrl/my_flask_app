@@ -1,7 +1,7 @@
 services:
   - type: web
     name: my-flask-app
-    runtime: python
-    pythonVersion: 3.11
+    env: python
+    pythonVersion: "3.11.8"   # 👈 Fix: Use Python 3.11 (not 3.13)
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
